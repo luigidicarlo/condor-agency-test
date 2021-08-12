@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import { CompleteList } from './CompleteList';
+import { PendingList } from './PendingList';
 
-function App() {
+export const App = () => {
+  const rawData = localStorage.getItem('todos') || null;
+  const [todos, setTodos] = useState(rawData ? JSON.parse(rawData) : []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="p-4">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xs-12 col-md-6">
+            <PendingList todos={todos} setTodos={setTodos} />
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <CompleteList todos={todos} setTodos={setTodos} />
+          </div>
+        </div>
+      </div>
+    </main>
   );
-}
-
-export default App;
+};
